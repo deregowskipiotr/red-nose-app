@@ -4,14 +4,24 @@ import { Menu, X } from "lucide-react";
 import { AthirstButton } from "./ui/AthirstButton";
 import { motion, AnimatePresence } from "framer-motion";
 
+const navItems = [
+  { name: "La Carta dei Vini", href: "#wines", id: "wines" },
+  { name: "La Nostra Storia", href: "#story", id: "story" },
+  { name: "Il Santuario", href: "#shop", id: "shop" },
+  { name: "Contatto", href: "#contact", id: "contact" },
+];
+
+const CHAOTIC_ORDER = [2, 0, 3, 1];
+const getChaoticDelay = (originalIndex: number) => {
+  const chaoticIndex = CHAOTIC_ORDER.indexOf(originalIndex);
+  return chaoticIndex * 0.25;
+};
+
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    setMounted(true);
-    
     // Handle scroll to update active section
     const handleScroll = () => {
       const sections = navItems.map(item => item.href.substring(1)); // Remove #
@@ -34,19 +44,7 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const navItems = [
-    { name: "La Carta dei Vini", href: "#wines", id: "wines" },
-    { name: "La Nostra Storia", href: "#story", id: "story" },
-    { name: "Il Santuario", href: "#shop", id: "shop" },
-    { name: "Contatto", href: "#contact", id: "contact" },
-  ];
 
-  // SLOWER chaotic order
-  const getChaoticDelay = (originalIndex: number) => {
-    const chaoticOrder = [2, 0, 3, 1]; // Il Santuario → Carta → Contatto → Nostra Storia
-    const chaoticIndex = chaoticOrder.indexOf(originalIndex);
-    return chaoticIndex * 0.25;
-  };
 
   return (
     <nav className="fixed top-0 w-full z-50">
@@ -90,8 +88,8 @@ export function Navbar() {
           </motion.div>
 
           {/* Desktop Navigation - CENTERED with ACTIVE STATE */}
-          <div className="hidden md:flex flex-1 items-center justify-center gap-8" style={{ opacity: mounted ? 1 : 0 }}>
-            {mounted && navItems.map((item, index) => {
+          <div className="hidden md:flex flex-1 items-center justify-center gap-8">
+            {navItems.map((item, index) => {
               const delay = getChaoticDelay(index);
               const isActive = activeSection === item.id;
               
@@ -106,7 +104,7 @@ export function Navbar() {
                     delay: delay,
                     ease: "easeOut"
                   }}
-                  className="relative text-text-primary/80 hover:text-text-primary transition-all duration-700 text-sm tracking-wider uppercase group cursor-pointer"
+                  className="relative text-text-primary/80 hover:text-text-primary transition-colors duration-700 text-sm tracking-wider uppercase group cursor-pointer"
                   onClick={(e) => {
                     e.preventDefault();
                     setActiveSection(item.id);
@@ -143,12 +141,12 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 1.1 }}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative w-10 h-10 rounded-sm border border-red-accent/30 hover:border-red-accent transition-all duration-700 group"
+            className="md:hidden relative w-10 h-10 rounded-sm border border-red-accent/30 hover:border-red-accent transition-colors duration-700 group"
           >
             {isMenuOpen ? (
-              <X className="w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-text-primary group-hover:text-red-accent transition-all duration-700" />
+              <X className="w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-text-primary group-hover:text-red-accent transition-colors duration-700" />
             ) : (
-              <Menu className="w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-text-primary group-hover:text-red-accent transition-all duration-700" />
+              <Menu className="w-5 h-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-text-primary group-hover:text-red-accent transition-colors duration-700" />
             )}
           </motion.button>
         </div>
@@ -184,7 +182,7 @@ export function Navbar() {
                         delay: i * 0.15,
                         ease: "easeOut"
                       }}
-                      className={`block px-6 py-3 transition-all duration-500 text-sm tracking-wider uppercase cursor-pointer ${
+                      className={`block px-6 py-3 transition-colors duration-500 text-sm tracking-wider uppercase cursor-pointer ${
                         isActive 
                           ? 'text-red-accent bg-red-accent/10' 
                           : 'text-text-primary/80 hover:text-text-primary hover:bg-red-accent/10'
@@ -214,7 +212,7 @@ export function Navbar() {
                 >
                   <button 
                     type="button"
-                    className="w-full px-6 py-2 bg-red-accent/30 backdrop-blur-md rounded-md border border-text-primary/10 hover:border-text-primary/20 text-text-primary/80 hover:text-text-primary/90 shadow-lg hover:shadow-text-primary/20 transition-all duration-500 cursor-pointer"
+                    className="w-full px-6 py-2 bg-red-accent/30 backdrop-blur-md rounded-md border border-text-primary/10 hover:border-text-primary/20 text-text-primary/80 hover:text-text-primary/90 shadow-lg hover:shadow-text-primary/20 transition-colors duration-500 cursor-pointer"
                   >
                     Collection Privée
                   </button>

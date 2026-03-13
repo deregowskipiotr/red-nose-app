@@ -17,7 +17,7 @@ export const AthirstButton = ({ children, className = '', onClick }: AthirstButt
         rounded-md border border-text-primary/10 
         hover:border-text-primary/20 text-text-primary/80 
         hover:text-text-primary/90 shadow-lg 
-        hover:shadow-text-primary/20 transition-all 
+        hover:shadow-text-primary/20 transition-colors 
         duration-500 cursor-pointer
         ${className}
       `}
