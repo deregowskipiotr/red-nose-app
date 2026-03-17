@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Wine } from 'lucide-react';
+import { LiquidGlassModal } from './LiquidGlassModal';
 
 interface LiquidGlassCardProps {
   className?: string;
@@ -14,6 +15,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
   description = "Experience the next generation of glassmorphism. Fluid, ambient, and beautifully rendered without heavy impact."
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <motion.div
@@ -21,7 +23,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
       onHoverEnd={() => setIsHovered(false)}
       className={`
         relative group overflow-hidden
-        rounded-xl w-80 h-96 p-8 flex flex-col justify-between
+        rounded-md w-80 h-96 p-8 flex flex-col justify-between
         transition-all duration-500 ease-out
         ${className}
       `}
@@ -30,7 +32,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
       }}
     >
       {/* 1. GLASSMORPHISM BASE - now with red accent border */}
-      <div className="absolute inset-0 bg-text-primary/5 backdrop-blur-xl rounded-xl border border-red-accent/10 z-0 transition-colors duration-500 group-hover:bg-text-primary/15 group-hover:border-red-accent/20" />
+      <div className="absolute inset-0 bg-text-primary/5 backdrop-blur-xl rounded-md border border-red-accent/10 z-0 transition-colors duration-500 group-hover:bg-text-primary/15 group-hover:border-red-accent/20" />
 
       {/* 2. GLOWING AURORA/LIQUID BACKGROUND ON HOVER - RED NOSE EDITION */}
       <AnimatePresence>
@@ -40,7 +42,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
-            className="absolute inset-0 z-10 pointer-events-none rounded-xl overflow-hidden mix-blend-screen"
+            className="absolute inset-0 z-10 pointer-events-none rounded-md overflow-hidden mix-blend-screen"
           >
             <div className="absolute -inset-1">
                {/* Pulsing RED blobs for that signature color */}
@@ -63,7 +65,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
       </AnimatePresence>
 
       {/* 3. PREMIUM TOP INSET HIGHLIGHT */}
-      <div className="absolute inset-0 shadow-[inset_0_1px_1px_rgba(248,247,244,0.15)] rounded-xl z-20 pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100" />
+      <div className="absolute inset-0 shadow-[inset_0_1px_1px_rgba(248,247,244,0.15)] rounded-md z-20 pointer-events-none transition-opacity duration-500 opacity-60 group-hover:opacity-100" />
 
       {/* 4. CARD CONTENT */}
       <div className="relative z-30 flex flex-col h-full text-text-primary">
@@ -88,10 +90,14 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
           </div>
 
           {/* Right Link */}
-          <motion.a 
-            href="#" 
-            className="text-sm font-medium text-text-primary flex items-center gap-1 group/link"
+          <motion.button 
+            type="button"
+            className="text-sm font-medium text-text-primary flex items-center gap-1 group/link cursor-pointer"
             whileHover={{ x: 2 }}
+            onClick={(e) => {
+              e.preventDefault();
+              setIsModalOpen(true);
+            }}
           >
             discover more
             <motion.span 
@@ -102,9 +108,15 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
             >
               →
             </motion.span>
-          </motion.a>
+          </motion.button>
         </div>
       </div>
+      <LiquidGlassModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={title}
+        description={description}
+      />
     </motion.div>
   );
 };

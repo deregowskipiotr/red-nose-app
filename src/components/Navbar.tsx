@@ -3,13 +3,8 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { AthirstButton } from "./ui/AthirstButton";
 import { motion, AnimatePresence } from "framer-motion";
+import { navItems } from "../data";
 
-const navItems = [
-  { name: "La Carta dei Vini", href: "#wines", id: "wines" },
-  { name: "La Nostra Storia", href: "#story", id: "story" },
-  { name: "Il Santuario", href: "#shop", id: "shop" },
-  { name: "Contatto", href: "#contact", id: "contact" },
-];
 
 const CHAOTIC_ORDER = [2, 0, 3, 1];
 const getChaoticDelay = (originalIndex: number) => {
@@ -22,11 +17,17 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
-    // Handle scroll to update active section
     const handleScroll = () => {
-      const sections = navItems.map(item => item.href.substring(1)); // Remove #
-      const scrollPosition = window.scrollY + 100; // Offset for navbar
+      const sections = navItems.map(item => item.id);
+      const scrollPosition = window.scrollY + 120; // Slightly increased offset
 
+      // Check if we're at the top of the page (home)
+      if (scrollPosition < 200) {
+        setActiveSection("home");
+        return;
+      }
+
+      // Check other sections
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
@@ -37,14 +38,25 @@ export function Navbar() {
           }
         }
       }
-      setActiveSection("home"); // Default to home if no section matches
     };
 
     window.addEventListener("scroll", handleScroll);
+    // Trigger once on mount to set initial state
+    handleScroll();
+    
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-
+  // Helper function to handle smooth scroll
+  const scrollToSection = (id: string) => {
+    setActiveSection(id);
+    
+    if (id === "home") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50">
@@ -66,7 +78,7 @@ export function Navbar() {
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo - appears LAST with TADAM! effect */}
+          {/* Logo - appears LAST with TADAM! effect - now links to home */}
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -77,6 +89,7 @@ export function Navbar() {
               bounce: 0.4
             }}
             className="flex items-center gap-3 group cursor-pointer"
+            onClick={() => scrollToSection("home")}
           >
             <div className="relative">
               <div className="w-8 h-8 bg-text-primary group-hover:bg-red-accent transition-colors duration-700" style={{ maskImage: 'url(/assets/nose.png)', maskSize: 'contain', maskRepeat: 'no-repeat' }} />
@@ -89,6 +102,32 @@ export function Navbar() {
 
           {/* Desktop Navigation - CENTERED with ACTIVE STATE */}
           <div className="hidden md:flex flex-1 items-center justify-center gap-8">
+            {/* Home link - now visible in navbar */}
+            <motion.a
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.0, delay: 0, ease: "easeOut" }}
+              className={`relative text-sm tracking-wider uppercase group cursor-pointer transition-colors duration-700 ${
+                activeSection === "home" 
+                  ? 'text-text-primary' 
+                  : 'text-text-primary/80 hover:text-text-primary'
+              }`}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToSection("home");
+              }}
+            >
+              Home
+              {/* Active indicator - red line */}
+              <span className={`absolute -bottom-1 left-0 h-px bg-red-accent/40 transition-all duration-700 ease-out ${
+                activeSection === "home" ? 'w-full' : 'w-0'
+              }`} />
+              {/* Hover effect */}
+              <span className="absolute -bottom-1 left-0 w-0 h-px bg-red-accent/50 transition-all duration-700 ease-out group-hover:w-full" />
+              {/* Glow effect */}
+              <span className="absolute inset-0 blur-md bg-red-accent/0 group-hover:bg-red-accent/10 transition-all duration-700 -z-10" />
+            </motion.a>
+
             {navItems.map((item, index) => {
               const delay = getChaoticDelay(index);
               const isActive = activeSection === item.id;
@@ -104,11 +143,12 @@ export function Navbar() {
                     delay: delay,
                     ease: "easeOut"
                   }}
-                  className="relative text-text-primary/80 hover:text-text-primary transition-colors duration-700 text-sm tracking-wider uppercase group cursor-pointer"
+                  className={`relative text-sm tracking-wider uppercase group cursor-pointer transition-colors duration-700 ${
+                    isActive ? 'text-text-primary' : 'text-text-primary/80 hover:text-text-primary'
+                  }`}
                   onClick={(e) => {
                     e.preventDefault();
-                    setActiveSection(item.id);
-                    document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                    scrollToSection(item.id);
                   }}
                 >
                   {item.name}
@@ -166,8 +206,32 @@ export function Navbar() {
               <div className="absolute inset-0 bg-bg-primary/95 backdrop-blur-md border border-red-accent/20" />
               
               <div className="relative py-4">
-                {/* Mobile links with SLOWER chaotic order */}
-                {[2, 0, 3, 1].map((chaoticIndex, i) => {
+                {/* Home link for mobile */}
+                <motion.a
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0, ease: "easeOut" }}
+                  className={`block px-6 py-3 transition-colors duration-500 text-sm tracking-wider uppercase cursor-pointer ${
+                    activeSection === "home" 
+                      ? 'text-red-accent bg-red-accent/10' 
+                      : 'text-text-primary/80 hover:text-text-primary hover:bg-red-accent/10'
+                  }`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection("home");
+                    setIsMenuOpen(false);
+                  }}
+                >
+                  <span className="relative">
+                    Home
+                    {activeSection === "home" && (
+                      <span className="absolute -bottom-1 left-0 w-full h-px bg-red-accent" />
+                    )}
+                  </span>
+                </motion.a>
+
+                {/* Mobile links with chaotic order */}
+                {CHAOTIC_ORDER.map((chaoticIndex, i) => {
                   const item = navItems[chaoticIndex];
                   const isActive = activeSection === item.id;
                   
@@ -179,7 +243,7 @@ export function Navbar() {
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ 
                         duration: 0.7,
-                        delay: i * 0.15,
+                        delay: (i + 1) * 0.15, // +1 because Home is now index 0
                         ease: "easeOut"
                       }}
                       className={`block px-6 py-3 transition-colors duration-500 text-sm tracking-wider uppercase cursor-pointer ${
@@ -189,8 +253,7 @@ export function Navbar() {
                       }`}
                       onClick={(e) => {
                         e.preventDefault();
-                        setActiveSection(item.id);
-                        document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                        scrollToSection(item.id);
                         setIsMenuOpen(false);
                       }}
                     >
@@ -208,7 +271,7 @@ export function Navbar() {
                   className="px-6 pt-2"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
+                  transition={{ duration: 0.6, delay: 0.9 }}
                 >
                   <button 
                     type="button"

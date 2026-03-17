@@ -1,9 +1,18 @@
 // src/components/Hero.tsx
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { LiquidNewButton } from "./ui/LiquidNewButton";
 import { LiquidGlassButton } from "./ui/LiquidGlassButton";
 
 export function Hero() {
+  const [particles] = useState(() => 
+    Array.from({ length: 5 }).map(() => ({
+      top: `${Math.random() * 100}%`,
+      left: `${Math.random() * 100}%`,
+      xOffset: Math.random() * 20 - 10,
+      duration: 3 + Math.random() * 2
+    }))
+  );
   return (
     <section className="relative min-h-screen mt-15 md:mt-0 flex items-center justify-center overflow-hidden">
       {/* Content container */}
@@ -151,18 +160,18 @@ export function Hero() {
                 transition={{ duration: 4, repeat: Infinity }}
               />
 
-              {[...Array(5)].map((_, i) => (
+              {particles.map((particle, i) => (
                 <motion.div
                   key={i}
                   className="absolute w-1 h-1 bg-red-accent/30 rounded-full"
-                  style={{ top: `${Math.random() * 100}%`, left: `${Math.random() * 100}%` }}
+                  style={{ top: particle.top, left: particle.left }}
                   animate={{
                     y: [0, -30, 0],
-                    x: [0, Math.random() * 20 - 10, 0],
+                    x: [0, particle.xOffset, 0],
                     opacity: [0, 1, 0]
                   }}
                   transition={{
-                    duration: 3 + Math.random() * 2,
+                    duration: particle.duration,
                     repeat: Infinity,
                     delay: i * 0.5
                   }}
