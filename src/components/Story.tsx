@@ -113,7 +113,7 @@ export function Story() {
                 animate={{ opacity: 1, filter: 'blur(0px)' }}
                 exit={{ opacity: 0, filter: 'blur(10px)' }}
                 transition={{ duration: 0.6, ease: "easeInOut" }}
-                src="" /* Empty img as requested */
+                src={storyItems[activeImageIndex].imgSrc}
                 alt={storyItems[activeImageIndex].imgAlt}
                 className="absolute inset-0 w-full h-full object-cover bg-gray-900/50 mix-blend-luminosity hover:mix-blend-normal transition-all duration-700"
               />

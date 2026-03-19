@@ -84,15 +84,15 @@ export function Shop() {
             transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
             className="relative order-1 lg:order-2 flex justify-center lg:justify-end"
           >
-            <div className="relative w-full max-w-md aspect-4/5">
+            <div className="relative flex items-center justify-center w-full max-w-md aspect-4/5">
               {/* Subtle ambient glow behind image */}
               <div className="absolute inset-0 bg-red-accent/5 blur-3xl rounded-full" />
               
               {/* Image without border, only shadow effect */}
               <img 
-                src="" /* Empty for now per instructions */
+                src="/assets/hq.webp" /* Empty for now per instructions */
                 alt="Sanctuary Collection" 
-                className="relative w-full h-full object-cover rounded-md shadow-[0_20px_50px_rgba(255,59,59,0.15)] bg-bg-secondary"
+                className="relative w-full h-100% object-contain rounded-md shadow-[0_20px_50px_rgba(255,59,59,0.15)] bg-bg-secondary"
               />
             </div>
           </motion.div>

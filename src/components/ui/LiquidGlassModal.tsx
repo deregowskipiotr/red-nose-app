@@ -67,6 +67,7 @@ export const LiquidGlassModal: React.FC<LiquidGlassModalProps> = ({
 
             {/* Close Button */}
             <button
+              type="button"
               onClick={onClose}
               aria-label="Close Modal"
               className="absolute top-6 right-6 z-50 p-2 rounded-full bg-text-primary/5 hover:bg-red-accent/20 border border-text-primary/10 hover:border-red-accent/40 text-text-primary/70 hover:text-red-accent transition-colors duration-300 backdrop-blur-xl cursor-pointer"
@@ -81,10 +82,12 @@ export const LiquidGlassModal: React.FC<LiquidGlassModalProps> = ({
               transition={{ delay: 0.4, duration: 0.6 }}
               className="relative z-30 max-w-2xl mx-auto flex flex-col items-center overflow-y-auto pb-10"
             >
-              <div className="w-16 h-px bg-red-accent/50 mb-6" />
-              <h2 className="text-4xl md:text-5xl font-serif tracking-widest text-text-primary mb-8 uppercase">
+              
+              <h2 className="text-4xl md:text-5xl font-serif tracking-widest text-text-primary mb-6 uppercase">
                 {title}
               </h2>
+
+              <div className="w-16 h-px bg-red-accent/50 mb-26" />
               
               <div className="bg-black/20 backdrop-blur-md border border-text-primary/5 p-6 rounded-2xl shadow-xl w-full">
                 <p className="text-text-primary/80 leading-relaxed text-lg font-light tracking-wide text-justify sm:text-center">

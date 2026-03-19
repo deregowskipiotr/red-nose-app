@@ -71,7 +71,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({
       <div className="relative z-30 flex flex-col h-full text-text-primary">
         {/* Top Section */}
         <div>
-          <h2 className="text-2xl font-bold tracking-wide mb-3">{title}</h2>
+          <h2 className="text-2xl font-bold tracking-wide mb-13">{title}</h2>
           <p className="text-sm text-text-primary/70 leading-relaxed max-w-[90%]">
             {description}
           </p>
